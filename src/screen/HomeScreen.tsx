@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
+import LottieView from 'lottie-react-native';
 import TaskItem from '../components/TaskItem';
 import AddTaskModal from '../components/AddTask';
 import { useTasks } from '../context/TaskContext';
-import { Task, GroupedTasks } from '../types'; 
+import { Task, GroupedTasks } from '../types';
 import { FAB } from 'react-native-paper';
 
 const groupTasksByCategory = (tasks: Task[]): GroupedTasks[] => {
@@ -48,15 +49,51 @@ const HomeScreen: React.FC = () => {
   };
 
   const remainingTasks = tasks.filter(task => !task.completed).length;
+  const totalTasks = tasks.length;
+  const completedTasks = totalTasks - remainingTasks;
+
+  const todoRate = totalTasks > 0 ? ((remainingTasks / totalTasks) * 100).toFixed(2) : '0.00';
+  const doneRate = totalTasks > 0 ? ((completedTasks / totalTasks) * 100).toFixed(2) : '0.00';
   const groupedTasks = groupTasksByCategory(tasks);
 
   return (
     <View style={styles.container}>
-      {/* <Image
-        source={{ uri: '' }} 
-        style={styles.sticker}
-      /> */}
-      <Text style={styles.totalTasks}>Total Remaining Tasks: {remainingTasks}</Text>
+      {/* Task Rate Cards */}
+      <View style={styles.cardsContainer}>
+        <View style={styles.card}>
+          
+          <LottieView
+          source={require('../assets/alert.json')} // Path to your JSON animation file
+          autoPlay
+          loop
+          style={styles.animation}
+        />
+        <Text style={styles.cardTitle}>Todo Task </Text>
+          <Text style={styles.cardContent}>{todoRate}%</Text>
+        </View>
+        <View style={styles.card}>
+        <LottieView
+          source={require('../assets/donee.json')} // Path to your JSON animation file
+          autoPlay
+          loop
+          style={styles.animation}
+        />
+          <Text style={styles.cardTitle}>Done Task </Text>
+          <Text style={styles.cardContent}>{doneRate}%</Text>
+        </View>
+      </View>
+
+      <View style={styles.remainingTasksContainer}>
+      <Text style={styles.remainingTasksText}>Remaining Tasks: {remainingTasks}</Text>
+        <LottieView
+          source={require('../assets/Animation - 1722825781033.json')} // Path to your JSON animation file
+          autoPlay
+          loop
+          style={styles.animation}
+        />
+        
+      </View>
+
       <FlatList
         data={groupedTasks}
         keyExtractor={item => item.category}
@@ -94,19 +131,47 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: 'black',
+    backgroundColor: '#FFF0F5',
   },
-  sticker: {
+  animation: {
     width: 100,
     height: 100,
-    alignSelf: 'center',
+  },
+  cardsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginBottom: 16,
   },
-  totalTasks: {
+  card: {
+    flex: 1,
+    marginHorizontal: 8,
+    padding: 16,
+    borderRadius: 8,
+    backgroundColor: '#FFBCD9',
+    alignItems: 'center',
+  },
+  cardTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#FF69B4',
+    marginBottom: 8,
+  },
+  cardContent: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#FF69B4',
+  },
+  remainingTasksContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+    left: 30
+  },
+  remainingTasksText: {
     fontSize: 20,
     fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 16,
+    color: '#FF69B4',
+    marginLeft: 16,
   },
   categoryContainer: {
     marginBottom: 24,
@@ -115,6 +180,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 8,
+    color: '#FF69B4',
   },
   fab: {
     position: 'absolute',

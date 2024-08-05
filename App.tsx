@@ -7,26 +7,11 @@ import { FAB } from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import HomeScreen from './src/screen/HomeScreen';
 import { TasksProvider } from './src/context/TaskContext';
-
+import TimerScreen from './src/screen/TimerScreen';
+import CalendarScreen from './src/screen/CalenderScreen';
+import SettingsScreen from './src/screen/SettingScreen';
 const Tab = createBottomTabNavigator();
 
-const CalendarScreen = () => (
-  <View style={styles.screen}>
-    <Text>Calendar Screen</Text>
-  </View>
-);
-
-const TimerScreen = () => (
-  <View style={styles.screen}>
-    <Text>Timer Screen</Text>
-  </View>
-);
-
-const SettingsScreen = () => (
-  <View style={styles.screen}>
-    <Text>Settings Screen</Text>
-  </View>
-);
 
 const App = () => (
   <TasksProvider>
@@ -64,9 +49,9 @@ const App = () => (
           })}
         >
           <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false }}/>
-          <Tab.Screen name="Calendar" component={CalendarScreen} />
-          <Tab.Screen name="Timer" component={TimerScreen} />
-          <Tab.Screen name="Settings" component={SettingsScreen} />
+          <Tab.Screen name="Calendar" component={CalendarScreen}  options={{ headerShown: false }}/>
+          <Tab.Screen name="Timer" component={TimerScreen} options={{ headerShown: false }} />
+          <Tab.Screen name="Settings" component={SettingsScreen} options={{ headerShown: false }} />
         </Tab.Navigator>
         
       </NavigationContainer>
