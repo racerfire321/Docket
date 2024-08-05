@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Modal, TextInput, Button } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Modal, TextInput } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import LinearGradient from 'react-native-linear-gradient';
 
 interface Task {
   id: string;
@@ -12,7 +14,7 @@ interface TaskItemProps {
   task: Task;
   onPress: (id: string) => void;
   onEdit: (id: string, newTitle: string) => void;
-  onDelete: (id: string) => void; 
+  onDelete: (id: string) => void;
 }
 
 const TaskItem: React.FC<TaskItemProps> = ({ task, onPress, onEdit, onDelete }) => {
@@ -33,10 +35,10 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onPress, onEdit, onDelete }) 
           </Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setIsModalVisible(true)} style={styles.editButton}>
-          <Text style={styles.editButtonText}>Edit</Text>
+          <Ionicons name="create-outline" size={20} color="black" />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => onDelete(task.id)} style={styles.deleteButton}>
-          <Text style={styles.deleteButtonText}>Delete</Text>
+          <Ionicons name="trash-outline" size={20} color="white" />
         </TouchableOpacity>
       </View>
       <Modal
@@ -46,14 +48,26 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onPress, onEdit, onDelete }) 
         onRequestClose={() => setIsModalVisible(false)}
       >
         <View style={styles.modalContainer}>
-          <TextInput
-            style={styles.input}
-            value={newTitle}
-            onChangeText={setNewTitle}
-            placeholder="Edit task title"
-          />
-          <Button title="Save" onPress={handleEdit} />
-          <Button title="Cancel" onPress={() => setIsModalVisible(false)} />
+          <LinearGradient
+            colors={['#FF69B4', '#FFBCD9']}
+            style={styles.modalContent}
+          >
+            <TextInput
+              style={styles.input}
+              value={newTitle}
+              onChangeText={setNewTitle}
+              placeholder="Edit task title"
+              placeholderTextColor="#aaa"
+            />
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity style={styles.button} onPress={handleEdit}>
+                <Text style={styles.buttonText}>Save</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={() => setIsModalVisible(false)}>
+                <Text style={styles.buttonText}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          </LinearGradient>
         </View>
       </Modal>
     </>
@@ -73,7 +87,7 @@ const styles = StyleSheet.create({
   },
   task: {
     fontSize: 16,
-    color: 'white',
+    color: '#FF69B4',
   },
   completedTask: {
     fontSize: 16,
@@ -92,26 +106,42 @@ const styles = StyleSheet.create({
     backgroundColor: '#FF6F6F',
     borderRadius: 4,
   },
-  editButtonText: {
-    color: 'black',
-  },
-  deleteButtonText: {
-    color: 'white',
-  },
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  modalContent: {
+    width: '80%',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
   },
   input: {
     height: 40,
-    width: '80%',
+    width: '100%',
     borderColor: 'white',
     borderWidth: 1,
     marginBottom: 20,
     paddingHorizontal: 10,
     color: 'white',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  button: {
+    flex: 1,
+    marginHorizontal: 5,
+    padding: 10,
+    borderRadius: 5,
+    backgroundColor: '#FF6F6F',
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#FFF',
+    fontWeight: 'bold',
   },
 });
 
