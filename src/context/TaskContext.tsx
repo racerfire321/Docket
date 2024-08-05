@@ -16,7 +16,7 @@ const TasksContext = createContext<TasksContextProps | undefined>(undefined);
 
 const TasksProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [tasks, setTasks] = useState<Task[]>([
-    { id: '1', category: 'Work', title: 'Complete report', completed: false },
+    { id: '1', category: 'Work', title: 'Complete report',  completed: false },
     { id: '2', category: 'Personal', title: 'Buy groceries', completed: false },
     { id: '3', category: 'Work', title: 'Email client', completed: true },
     { id: '4', category: 'Home', title: 'Clean kitchen', completed: false },
