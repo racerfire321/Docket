@@ -63,7 +63,7 @@ const HomeScreen: React.FC = () => {
         <View style={styles.card}>
           
           <LottieView
-          source={require('../assets/alert.json')} // Path to your JSON animation file
+          source={require('../assets/alert.json')} 
           autoPlay
           loop
           style={styles.animation}
@@ -73,7 +73,7 @@ const HomeScreen: React.FC = () => {
         </View>
         <View style={styles.card}>
         <LottieView
-          source={require('../assets/donee.json')} // Path to your JSON animation file
+          source={require('../assets/donee.json')} 
           autoPlay
           loop
           style={styles.animation}
@@ -86,7 +86,7 @@ const HomeScreen: React.FC = () => {
       <View style={styles.remainingTasksContainer}>
       <Text style={styles.remainingTasksText}>Remaining Tasks: {remainingTasks}</Text>
         <LottieView
-          source={require('../assets/Animation - 1722825781033.json')} // Path to your JSON animation file
+          source={require('../assets/Animation - 1722825781033.json')}
           autoPlay
           loop
           style={styles.animation}

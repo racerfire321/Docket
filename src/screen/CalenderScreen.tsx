@@ -1,27 +1,18 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
-
-interface Task {
-  name: string;
-  date: string;
-}
-
-const tasks: Task[] = [
-  { name: 'Meeting with Bob', date: '2024-08-05' },
-  { name: 'Dentist Appointment', date: '2024-08-06' },
-  { name: 'Grocery Shopping', date: '2024-08-07' },
-];
-
+import { Calendar } from 'react-native-calendars';
+import { useTasks } from '../context/TaskContext'; 
 const CalendarScreen: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<string>('');
+  const { tasks } = useTasks();
 
   const renderTasks = (date: string) => {
     return tasks
       .filter(task => task.date === date)
       .map(task => (
-        <View key={task.name} style={styles.taskContainer}>
-          <Text>{task.name}</Text>
+        <View key={task.id} style={styles.taskContainer}>
+          <Text style={styles.taskTitle}>{task.title}</Text>
+          <Text style={styles.taskDescription}>{task.description}</Text>
         </View>
       ));
   };
@@ -39,7 +30,7 @@ const CalendarScreen: React.FC = () => {
       />
       <View style={styles.tasksContainer}>
         <Text style={styles.selectedDate}>{selectedDate}</Text>
-        {selectedDate ? renderTasks(selectedDate) : <Text style={styles.selectedDate}>No tasks for selected date.</Text>}
+        {selectedDate ? renderTasks(selectedDate) : <Text style={styles.noTasksText}>No tasks for selected date.</Text>}
       </View>
     </View>
   );
@@ -57,13 +48,28 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
-    color:'#FF69B4',
+    color: '#FF69B4',
   },
   taskContainer: {
-    backgroundColor: '#FF69B4',
+    backgroundColor: '#FFBCD9',
     padding: 10,
     marginVertical: 5,
     borderRadius: 10,
+    borderColor: '#FF69B4',
+    borderWidth: 1,
+  },
+  taskTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#FF69B4',
+  },
+  taskDescription: {
+    fontSize: 14,
+    color: '#333',
+    marginTop: 5,
+  },
+  noTasksText: {
+    color: '#FF69B4',
   },
 });
 

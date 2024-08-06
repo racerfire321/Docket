@@ -2,13 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal, TextInput } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
-
-interface Task {
-  id: string;
-  category: string;
-  title: string;
-  completed: boolean;
-}
+import { Task } from '../types';
 
 interface TaskItemProps {
   task: Task;
@@ -29,10 +23,14 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onPress, onEdit, onDelete }) 
   return (
     <>
       <View style={styles.container}>
+        <View style={styles.dateContainer}>
+          <Text style={styles.dateText}>{new Date(task.date).toDateString().toUpperCase()}</Text>
+        </View>
         <TouchableOpacity onPress={() => onPress(task.id)} style={styles.taskContainer}>
           <Text style={task.completed ? styles.completedTask : styles.task}>
             {task.title}
           </Text>
+          <Text style={styles.description}>{task.description}</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setIsModalVisible(true)} style={styles.editButton}>
           <Ionicons name="create-outline" size={20} color="black" />
@@ -82,6 +80,18 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
   },
+  dateContainer: {
+    padding: 8,
+    backgroundColor: '#FFBCD9',
+    borderRadius: 4,
+    marginRight: 8,
+    width: 70,
+    
+  },
+  dateText: {
+    fontSize: 12,
+    color: '#333',
+  },
   taskContainer: {
     flex: 1,
   },
@@ -93,6 +103,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'grey',
     textDecorationLine: 'line-through',
+  },
+  description: {
+    fontSize: 12,
+    color: '#777',
+    marginTop: 4,
   },
   editButton: {
     marginLeft: 8,
