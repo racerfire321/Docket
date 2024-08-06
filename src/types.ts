@@ -1,12 +1,9 @@
 export interface Task {
-  id: string;
-  title: string;
-  category: string;
-  completed: boolean;
-  description: string; 
-  date: string; 
-}
-
+    id: string;
+    category: string;
+    title: string;
+    completed: boolean;
+  }
   
   export interface GroupedTasks {
     category: string;
