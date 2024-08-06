@@ -1,3 +1,4 @@
+// TaskItem.tsx
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal, TextInput } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -7,7 +8,7 @@ import { Task } from '../types';
 interface TaskItemProps {
   task: Task;
   onPress: (id: string) => void;
-  onEdit: (id: string, newTitle: string) => void;
+  onEdit: (id: string, newTitle: string, timestamp: string) => void;
   onDelete: (id: string) => void;
 }
 
@@ -16,7 +17,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onPress, onEdit, onDelete }) 
   const [newTitle, setNewTitle] = useState(task.title);
 
   const handleEdit = () => {
-    onEdit(task.id, newTitle);
+    onEdit(task.id, newTitle, new Date().toISOString());
     setIsModalVisible(false);
   };
 
@@ -31,6 +32,12 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onPress, onEdit, onDelete }) 
             {task.title}
           </Text>
           <Text style={styles.description}>{task.description}</Text>
+          {task.timeSpent !== undefined && (
+            <Text style={styles.timeSpent}>Time Spent: {Math.floor(task.timeSpent / 60)}m {task.timeSpent % 60}s</Text>
+          )}
+          {task.timestamp && (
+            <Text style={styles.timestamp}>Edited at: {new Date(task.timestamp).toLocaleTimeString()}</Text>
+          )}
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setIsModalVisible(true)} style={styles.editButton}>
           <Ionicons name="create-outline" size={20} color="black" />
@@ -61,7 +68,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onPress, onEdit, onDelete }) 
               <TouchableOpacity style={styles.button} onPress={handleEdit}>
                 <Text style={styles.buttonText}>Save</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={() => setIsModalVisible(false)}>
+              <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={() => setIsModalVisible(false)}>
                 <Text style={styles.buttonText}>Cancel</Text>
               </TouchableOpacity>
             </View>
@@ -86,7 +93,6 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     marginRight: 8,
     width: 70,
-    
   },
   dateText: {
     fontSize: 12,
@@ -105,6 +111,16 @@ const styles = StyleSheet.create({
     textDecorationLine: 'line-through',
   },
   description: {
+    fontSize: 12,
+    color: '#777',
+    marginTop: 4,
+  },
+  timeSpent: {
+    fontSize: 12,
+    color: '#777',
+    marginTop: 4,
+  },
+  timestamp: {
     fontSize: 12,
     color: '#777',
     marginTop: 4,
@@ -153,6 +169,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: '#FF6F6F',
     alignItems: 'center',
+  },
+  cancelButton: {
+    backgroundColor: '#FF6F6F',
   },
   buttonText: {
     color: '#FFF',

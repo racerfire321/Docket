@@ -5,6 +5,8 @@ export interface Task {
   completed: boolean;
   description: string; 
   date: string; 
+  timeSpent?: number;
+  timestamp?: string;
 }
 
   
