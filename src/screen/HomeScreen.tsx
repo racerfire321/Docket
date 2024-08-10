@@ -62,7 +62,6 @@ const HomeScreen: React.FC = () => {
 
   return (
     <View style={[styles.container, theme === 'light' ? styles.lightContainer : styles.darkContainer]}>
-      {/* Task Rate Cards */}
       <View style={styles.cardsContainer}>
         <View style={styles.card}>
           <LottieView

@@ -4,6 +4,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { useLogin } from '../context/auth/AuthContext';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import RegisterModal from '../components/Register';
+import LottieView from 'lottie-react-native';
 
 export type RootStackParamList = {
   Login: undefined;
@@ -22,48 +23,54 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
     const success = await login(username, password);
     if (success) {
       Alert.alert('Login Successful');
-
+      navigation.navigate('Main');
     } else {
       Alert.alert('Invalid credentials. Please try again.');
     }
   };
 
   const handleForgotPassword = () => {
-    // Handle forgot password logic here
+    Alert.alert('yet to be added');
   };
 
   return (
-    <LinearGradient colors={['#FFBCD9', 'pink']} style={styles.background}>
+     <LinearGradient colors={['#FFBCD9', 'pink']} style={styles.background}>
       <View style={styles.container}>
-        <Text style={styles.title}>Docket</Text>
+     
+        <Text style={styles.logo}> Docket<LottieView
+            source={require('../assets/l.json')}
+            autoPlay
+            loop
+            style={styles.animation}
+          /></Text>
         <TextInput
           style={styles.input}
           placeholder="Username"
-          placeholderTextColor="#ccc"
+          placeholderTextColor="#BCC1C8"
           value={username}
           onChangeText={setUsername}
         />
         <TextInput
           style={styles.input}
           placeholder="Password"
-          placeholderTextColor="#ccc"
+          placeholderTextColor="#BCC1C8"
           value={password}
           onChangeText={setPassword}
           secureTextEntry
         />
         <TouchableOpacity onPress={handleForgotPassword}>
-          <Text style={styles.linkText}>Forgot Password?</Text>
+          <Text style={styles.forgotText}>Forgot Password?</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>LOG IN</Text>
+          <Text style={styles.buttonText}>Log In</Text>
         </TouchableOpacity>
-        <View style={styles.bottomLinks}>
+        <View style={styles.registerContainer}>
+          <Text style={styles.noAccountText}>Don't have an account?</Text>
           <TouchableOpacity onPress={() => setIsModalVisible(true)}>
-            <Text style={styles.linkText}>Register Now</Text>
+            <Text style={styles.registerText}>Create New Account</Text>
           </TouchableOpacity>
         </View>
       </View>
-      {/* Uncomment and use RegisterModal if needed */}
       <RegisterModal
         visible={isModalVisible}
         closeModal={() => setIsModalVisible(false)}
@@ -82,29 +89,34 @@ const styles = StyleSheet.create({
     paddingHorizontal: 40,
     backgroundColor: 'rgba(0.6,0.5,0,0.3)',
   },
-  title: {
-    color: 'white',
-    fontSize: 49,
+  animation: {
+    width: 100,
+    height: 100,
+  },
+  logo: {
+    fontSize: 36,
     fontWeight: 'bold',
-    borderColor: 'black',
-    marginBottom: 50,
+    color: 'white',
+    marginBottom: 60,
+    marginLeft: 40,
     textAlign: 'center',
   },
   input: {
     height: 50,
-    borderColor: '#ccc',
+    borderColor: '#BCC1C8',
     borderWidth: 1,
-    borderRadius: 9,
-    paddingHorizontal: 10,
-    marginBottom: 20,
+    borderRadius: 25,
+    paddingHorizontal: 20,
+    marginBottom: 15,
     backgroundColor: 'white',
     color: 'black',
   },
   button: {
     backgroundColor: '#FFBCD9',
     paddingVertical: 12,
-    borderRadius: 20,
+    borderRadius: 25,
     marginTop: 20,
+    marginBottom:20,
   },
   buttonText: {
     color: 'white',
@@ -112,14 +124,21 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
-  bottomLinks: {
-    alignItems: 'center',
-    marginTop: 80,
+  forgotText: {
+    color: 'white',
+    textAlign: 'center',
+    marginTop: 10,
   },
-  linkText: {
-    color: '#FFEFEF',
-    fontSize: 14,
-    fontWeight: '800',
+  registerContainer: {
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  noAccountText: {
+    color: 'white',
+  },
+  registerText: {
+    color: 'pink',
+    fontWeight: 'bold',
   },
 });
 
