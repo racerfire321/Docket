@@ -144,10 +144,11 @@ const styles = StyleSheet.create({
   },
   lightInput: {
     backgroundColor: '#FFF',
-    borderColor: '#ccc',
+    borderColor: 'white',
   },
   darkInput: {
     backgroundColor: '#333',
+     color: '#FFFFFF',
     borderColor: '#666',
   },
   descriptionInput: {

@@ -13,6 +13,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import LoginScreen from './src/screen/LoginScreen';
 import { LoginProvider, useLogin } from './src/context/auth/AuthContext';
 import { ThemeContext } from './src/context/Theme/ThemContext';
+import { I18nextProvider } from 'react-i18next';
+import i18n from './src/i18n';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -84,9 +86,11 @@ const AppNavigator = () => {
 };
 
 const App = () => (
+  <I18nextProvider i18n={i18n}>
   <ThemeProvider>
   <LoginProvider>
     <TasksProvider>
+
       <SafeAreaProvider>
         <NavigationContainer>
           <AppNavigator />
@@ -95,6 +99,7 @@ const App = () => (
     </TasksProvider>
   </LoginProvider>
   </ThemeProvider>
+  </I18nextProvider>
 );
 
 export default App;
