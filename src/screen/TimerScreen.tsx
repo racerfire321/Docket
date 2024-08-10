@@ -1,12 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useTasks } from '../context/TaskContext';
-import { Task } from '../types';
+import { ThemeContext } from '../context/Theme/ThemContext'; 
 import LottieView from 'lottie-react-native';
 
 const TimerScreen: React.FC = () => {
   const { tasks, setTasks } = useTasks();
+  const { theme } = useContext(ThemeContext); 
   const [seconds, setSeconds] = useState<number>(0);
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [selectedTaskId, setSelectedTaskId] = useState<string>('');
@@ -65,8 +66,8 @@ const TimerScreen: React.FC = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.pickerWrapper}>
+    <View style={[styles.container, theme === 'light' ? styles.lightContainer : styles.darkContainer]}>
+      <View style={[styles.pickerWrapper, theme === 'light' ? styles.lightPickerWrapper : styles.darkPickerWrapper]}>
         <Picker
           selectedValue={selectedTaskId}
           style={styles.picker}
@@ -84,14 +85,16 @@ const TimerScreen: React.FC = () => {
         loop
         style={styles.animation}
       />
-      <Text style={styles.timerText}>{new Date(seconds * 1000).toISOString().substr(11, 8)}</Text>
+      <Text style={[styles.timerText, theme === 'light' ? styles.lightText : styles.darkText]}>
+        {new Date(seconds * 1000).toISOString().substr(11, 8)}
+      </Text>
       <View style={styles.buttonsGroup}>
-      <TouchableOpacity onPress={isRunning ? handleStop : handleStart} style={styles.button}>
-        <Text style={styles.buttonText}>{isRunning ? 'Stop' : 'Start'}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={isRunning ? handleStop : handleReset}  style={[styles.button, styles.resetButton]}>
-        <Text style={styles.buttonText}>Reset</Text>
-      </TouchableOpacity>
+        <TouchableOpacity onPress={isRunning ? handleStop : handleStart} style={[styles.button, isRunning ? styles.stopButton : styles.startButton]}>
+          <Text style={styles.buttonText}>{isRunning ? 'Stop' : 'Start'}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleReset} style={[styles.button, styles.resetButton]}>
+          <Text style={styles.buttonText}>Reset</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -102,13 +105,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  lightContainer: {
     backgroundColor: '#FFF0F5',
   },
-  buttonsGroup:{
-    flexDirection: 'row-reverse',
-    // justifyContent: 'space-between',
-    // alignItems: 'center',
-    gap: 30,
+  darkContainer: {
+    backgroundColor: '#1c1c1c',
   },
   pickerWrapper: {
     height: 50,
@@ -116,9 +118,15 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginVertical: 5,
     borderRadius: 10,
-    borderColor: '#FF69B4',
     borderWidth: 1,
+  },
+  lightPickerWrapper: {
+    borderColor: '#FF69B4',
     backgroundColor: '#FFBCD9',
+  },
+  darkPickerWrapper: {
+    borderColor: '#FF69B4',
+    backgroundColor: '#333',
   },
   animation: {
     width: 200,
@@ -132,22 +140,36 @@ const styles = StyleSheet.create({
   timerText: {
     fontSize: 48,
     fontWeight: 'bold',
-    color: '#FF69B4', 
     marginBottom: 20,
   },
+  lightText: {
+    color: '#FF69B4',
+  },
+  darkText: {
+    color: '#FFFFFF',
+  },
+  buttonsGroup: {
+    flexDirection: 'row-reverse',
+    gap: 30,
+  },
   button: {
-    backgroundColor: '#FF69B4',
     paddingVertical: 10,
     paddingHorizontal: 30,
     borderRadius: 20,
     marginVertical: 5,
   },
+  startButton: {
+    backgroundColor: '#FF69B4',
+  },
+  stopButton: {
+    backgroundColor: '#FF1493',
+  },
+  resetButton: {
+    backgroundColor: '#FF1493',
+  },
   buttonText: {
     fontSize: 20,
     color: 'white',
-  },
-  resetButton: {
-    backgroundColor: '#FF1493', 
   },
 });
 

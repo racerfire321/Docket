@@ -1,24 +1,34 @@
-// TaskItem.tsx
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Modal, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Modal, TextInput, Button } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { Task } from '../types';
 
 interface TaskItemProps {
   task: Task;
   onPress: (id: string) => void;
-  onEdit: (id: string, newTitle: string, timestamp: string) => void;
+  onEdit: (id: string, newTask: Partial<Task>) => void;
   onDelete: (id: string) => void;
 }
 
 const TaskItem: React.FC<TaskItemProps> = ({ task, onPress, onEdit, onDelete }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [newTitle, setNewTitle] = useState(task.title);
+  const [newDescription, setNewDescription] = useState(task.description);
+  const [newDate, setNewDate] = useState(new Date(task.date));
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
   const handleEdit = () => {
-    onEdit(task.id, newTitle, new Date().toISOString());
+    onEdit(task.id, { title: newTitle, description: newDescription, date: newDate.toISOString() });
     setIsModalVisible(false);
+  };
+
+  const handleDateChange = (event: any, selectedDate: Date | undefined) => {
+    setShowDatePicker(false);
+    if (selectedDate) {
+      setNewDate(selectedDate);
+    }
   };
 
   return (
@@ -64,6 +74,25 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onPress, onEdit, onDelete }) 
               placeholder="Edit task title"
               placeholderTextColor="#aaa"
             />
+            <TextInput
+              style={[styles.input, styles.descriptionInput]}
+              value={newDescription}
+              onChangeText={setNewDescription}
+              placeholder="Edit task description"
+              placeholderTextColor="#aaa"
+              multiline
+            />
+            <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+              <Text style={styles.datePickerText}>{newDate.toDateString()}</Text>
+            </TouchableOpacity>
+            {showDatePicker && (
+              <DateTimePicker
+                value={newDate}
+                mode="date"
+                display="default"
+                onChange={handleDateChange}
+              />
+            )}
             <View style={styles.buttonContainer}>
               <TouchableOpacity style={styles.button} onPress={handleEdit}>
                 <Text style={styles.buttonText}>Save</Text>
@@ -156,6 +185,15 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     paddingHorizontal: 10,
     color: 'white',
+  },
+  descriptionInput: {
+    height: 80,
+    textAlignVertical: 'top',
+  },
+  datePickerText: {
+    fontSize: 16,
+    color: 'white',
+    marginBottom: 20,
   },
   buttonContainer: {
     flexDirection: 'row',

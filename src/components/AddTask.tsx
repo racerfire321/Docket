@@ -1,10 +1,10 @@
-// AddTaskModal.tsx
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, Modal, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import LinearGradient from 'react-native-linear-gradient';
 import { Task } from '../types';
+import { ThemeContext } from '../context/Theme/ThemContext';
 
 interface AddTaskModalProps {
   visible: boolean;
@@ -15,6 +15,7 @@ interface AddTaskModalProps {
 const categories = ['Personal', 'Work', 'Home', 'Other'];
 
 const AddTaskModal: React.FC<AddTaskModalProps> = ({ visible, onClose, onAdd }) => {
+  const { theme } = useContext(ThemeContext);
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('Personal');
   const [description, setDescription] = useState('');
@@ -58,16 +59,16 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({ visible, onClose, onAdd }) 
         colors={['pink', 'white']}
         style={styles.gradient}
       >
-        <View style={styles.modalContainer}>
+        <View style={[styles.modalContainer, theme === 'light' ? styles.lightModal : styles.darkModal]}>
           <TextInput
-            style={styles.input}
+            style={[styles.input, theme === 'light' ? styles.lightInput : styles.darkInput]}
             value={title}
             onChangeText={setTitle}
             placeholder="Task title"
             placeholderTextColor="#aaa"
           />
           <TextInput
-            style={[styles.input, styles.descriptionInput]}
+            style={[styles.input, styles.descriptionInput, theme === 'light' ? styles.lightInput : styles.darkInput]}
             value={description}
             onChangeText={setDescription}
             placeholder="Description"
@@ -75,7 +76,9 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({ visible, onClose, onAdd }) 
             multiline
           />
           <TouchableOpacity onPress={() => setShowDatePicker(true)}>
-            <Text style={styles.datePickerText}>{date.toDateString()}</Text>
+            <Text style={[styles.datePickerText, theme === 'light' ? styles.lightText : styles.darkText]}>
+              {date.toDateString()}
+            </Text>
           </TouchableOpacity>
           {showDatePicker && (
             <DateTimePicker
@@ -85,7 +88,7 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({ visible, onClose, onAdd }) 
               onChange={handleDateChange}
             />
           )}
-          <Text style={styles.label}>Category:</Text>
+          <Text style={[styles.label, theme === 'light' ? styles.lightText : styles.darkText]}>Category:</Text>
           <View style={styles.radioGroup}>
             {categories.map(cat => (
               <View key={cat} style={styles.radioItem}>
@@ -94,12 +97,12 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({ visible, onClose, onAdd }) 
                   status={category === cat ? 'checked' : 'unchecked'}
                   onPress={() => setCategory(cat)}
                 />
-                <Text style={styles.radioLabel}>{cat}</Text>
+                <Text style={[styles.radioLabel, theme === 'light' ? styles.lightText : styles.darkText]}>{cat}</Text>
               </View>
             ))}
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button} onPress={handleAddTask}>
+            <TouchableOpacity style={[styles.button, styles.addButton]} onPress={handleAddTask}>
               <Text style={styles.buttonText}>Add Task</Text>
             </TouchableOpacity>
             <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={onClose}>
@@ -120,20 +123,32 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     width: '90%',
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
     borderRadius: 10,
     padding: 20,
+  },
+  lightModal: {
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+  },
+  darkModal: {
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
   },
   input: {
     height: 40,
     width: '100%',
     paddingHorizontal: 10,
     color: '#333',
-    backgroundColor: 'transparent',
     borderColor: '#ccc',
     borderWidth: 1,
     marginBottom: 20,
     borderRadius: 5,
+  },
+  lightInput: {
+    backgroundColor: '#FFF',
+    borderColor: '#ccc',
+  },
+  darkInput: {
+    backgroundColor: '#333',
+    borderColor: '#666',
   },
   descriptionInput: {
     height: 80,
@@ -141,12 +156,10 @@ const styles = StyleSheet.create({
   },
   datePickerText: {
     fontSize: 16,
-    color: '#333',
     marginBottom: 20,
   },
   label: {
     fontSize: 16,
-    color: '#333',
     marginBottom: 10,
   },
   radioGroup: {
@@ -160,7 +173,6 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   radioLabel: {
-    color: '#333',
     marginLeft: 5,
   },
   buttonContainer: {
@@ -171,11 +183,13 @@ const styles = StyleSheet.create({
   },
   button: {
     flex: 1,
-    backgroundColor: '#4CAF50',
     padding: 10,
     alignItems: 'center',
     marginHorizontal: 5,
     borderRadius: 5,
+  },
+  addButton: {
+    backgroundColor: '#4CAF50',
   },
   cancelButton: {
     backgroundColor: '#FF6F6F',
@@ -183,6 +197,12 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontSize: 16,
+  },
+  lightText: {
+    color: '#FF69B4',
+  },
+  darkText: {
+    color: '#FFFFFF',
   },
 });
 
