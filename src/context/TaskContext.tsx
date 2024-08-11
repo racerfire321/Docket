@@ -10,11 +10,8 @@ const TasksContext = createContext<TasksContextProps | undefined>(undefined);
 
 const TasksProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [tasks, setTasks] = useState<Task[]>([
-    { id: '1', category: 'Work', title: 'Complete report', description: 'Finish the quarterly financial report.', date: '2024-08-05', completed: false },
-    { id: '2', category: 'Personal', title: 'Buy groceries', description: 'Buy milk, bread, and eggs from the supermarket.', date: '2024-08-06', completed: false },
-    { id: '3', category: 'Work', title: 'Email client', description: 'Send the project proposal to the client.', date: '2024-08-07',timeSpent: 19, completed: true },
-    { id: '4', category: 'Home', title: 'Clean kitchen', description: 'Clean the countertops, sink, and mop the floor.', date: '2024-08-08', completed: false },
-    { id: '5', category: 'Personal', title: 'Exercise', description: 'Go for a 30-minute run in the park.', date: '2024-08-09', completed: false },
+    { id: '1', category: 'Work', title: 'Demo task', description: 'Finish the quarterly financial report.', date: '2024-08-05', completed: true },
+    { id: '2', category: 'Personal', title: 'Demo task for timer', description: 'uncompleted to show on timer', date: '2024-08-09', completed: false },
   ]);
 
   return (
