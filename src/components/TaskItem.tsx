@@ -1,30 +1,36 @@
-// TaskItem.tsx
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal, TextInput } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
-
-interface Task {
-  id: string;
-  category: string;
-  title: string;
-  completed: boolean;
-}
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { Task } from '../types';
+import { useTranslation } from 'react-i18next';
 
 interface TaskItemProps {
   task: Task;
   onPress: (id: string) => void;
-  onEdit: (id: string, newTitle: string, timestamp: string) => void;
+  onEdit: (id: string, newTask: Partial<Task>) => void;
   onDelete: (id: string) => void;
 }
 
 const TaskItem: React.FC<TaskItemProps> = ({ task, onPress, onEdit, onDelete }) => {
+  const { t } = useTranslation();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [newTitle, setNewTitle] = useState(task.title);
+  const [newDescription, setNewDescription] = useState(task.description);
+  const [newDate, setNewDate] = useState(new Date(task.date));
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
   const handleEdit = () => {
-    onEdit(task.id, newTitle, new Date().toISOString());
+    onEdit(task.id, { title: newTitle, description: newDescription, date: newDate.toISOString() });
     setIsModalVisible(false);
+  };
+
+  const handleDateChange = (event: any, selectedDate: Date | undefined) => {
+    setShowDatePicker(false);
+    if (selectedDate) {
+      setNewDate(selectedDate);
+    }
   };
 
   return (
@@ -36,10 +42,10 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onPress, onEdit, onDelete }) 
           </Text>
           <Text style={styles.description}>{task.description}</Text>
           {task.timeSpent !== undefined && (
-            <Text style={styles.timeSpent}>Time Spent: {Math.floor(task.timeSpent / 60)}m {task.timeSpent % 60}s</Text>
+            <Text style={styles.timeSpent}>{t('time_spent', { minutes: Math.floor(task.timeSpent / 60), seconds: task.timeSpent % 60 })}</Text>
           )}
           {task.timestamp && (
-            <Text style={styles.timestamp}>Edited at: {new Date(task.timestamp).toLocaleTimeString()}</Text>
+            <Text style={styles.timestamp}>{t('edited_at', { time: new Date(task.timestamp).toLocaleTimeString() })}</Text>
           )}
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setIsModalVisible(true)} style={styles.editButton}>
@@ -64,15 +70,34 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onPress, onEdit, onDelete }) 
               style={styles.input}
               value={newTitle}
               onChangeText={setNewTitle}
-              placeholder="Edit task title"
+              placeholder={t('edit_task_title')}
               placeholderTextColor="#aaa"
             />
+            <TextInput
+              style={[styles.input, styles.descriptionInput]}
+              value={newDescription}
+              onChangeText={setNewDescription}
+              placeholder={t('edit_task_description')}
+              placeholderTextColor="#aaa"
+              multiline
+            />
+            <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+              <Text style={styles.datePickerText}>{newDate.toDateString()}</Text>
+            </TouchableOpacity>
+            {showDatePicker && (
+              <DateTimePicker
+                value={newDate}
+                mode="date"
+                display="default"
+                onChange={handleDateChange}
+              />
+            )}
             <View style={styles.buttonContainer}>
               <TouchableOpacity style={styles.button} onPress={handleEdit}>
-                <Text style={styles.buttonText}>Save</Text>
+                <Text style={styles.buttonText}>{t('save')}</Text>
               </TouchableOpacity>
               <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={() => setIsModalVisible(false)}>
-                <Text style={styles.buttonText}>Cancel</Text>
+                <Text style={styles.buttonText}>{t('cancel')}</Text>
               </TouchableOpacity>
             </View>
           </LinearGradient>
@@ -160,6 +185,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     color: 'white',
   },
+  descriptionInput: {
+    height: 80,
+    textAlignVertical: 'top',
+  },
+  datePickerText: {
+    fontSize: 16,
+    color: 'white',
+    marginBottom: 20,
+  },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -183,3 +217,4 @@ const styles = StyleSheet.create({
 });
 
 export default TaskItem;
+
