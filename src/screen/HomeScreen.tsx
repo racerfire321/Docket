@@ -32,10 +32,10 @@ const HomeScreen: React.FC = () => {
     );
   };
 
-  const handleEditTask = (id: string, newTitle: string) => {
+  const handleEditTask = (id: string, newTitle: string, timestamp: string) => {
     setTasks(prevTasks =>
       prevTasks.map(task =>
-        task.id === id ? { ...task, title: newTitle } : task
+        task.id === id ? { ...task, title: newTitle, timestamp } : task
       )
     );
   };
@@ -61,37 +61,47 @@ const HomeScreen: React.FC = () => {
       {/* Task Rate Cards */}
       <View style={styles.cardsContainer}>
         <View style={styles.card}>
-          
           <LottieView
-          source={require('../assets/alert.json')} // Path to your JSON animation file
-          autoPlay
-          loop
-          style={styles.animation}
-        />
-        <Text style={styles.cardTitle}>Todo Task </Text>
+            source={require('../assets/alert.json')} 
+            autoPlay
+            loop
+            style={styles.animation}
+          />
+          <Text style={styles.cardTitle}>Todo Task</Text>
           <Text style={styles.cardContent}>{todoRate}%</Text>
         </View>
         <View style={styles.card}>
-        <LottieView
-          source={require('../assets/donee.json')} // Path to your JSON animation file
-          autoPlay
-          loop
-          style={styles.animation}
-        />
-          <Text style={styles.cardTitle}>Done Task </Text>
+          <LottieView
+            source={require('../assets/donee.json')} 
+            autoPlay
+            loop
+            style={styles.animation}
+          />
+          <Text style={styles.cardTitle}>Done Task</Text>
           <Text style={styles.cardContent}>{doneRate}%</Text>
         </View>
       </View>
 
       <View style={styles.remainingTasksContainer}>
-      <Text style={styles.remainingTasksText}>Remaining Tasks: {remainingTasks}</Text>
+      <AddTaskModal
+        visible={isModalVisible}
+        onClose={() => setIsModalVisible(false)}
+        onAdd={handleAddTask}
+      />
+      <FAB
+        style={styles.fab}
+        icon="plus"
+        color='white'
+        onPress={() => setIsModalVisible(true)}
+      />
+        <Text style={styles.remainingTasksText}>Remaining Tasks: {remainingTasks}</Text>
         <LottieView
           source={require('../assets/Animation - 1722825781033.json')} // Path to your JSON animation file
           autoPlay
           loop
           style={styles.animation}
         />
-        
+       
       </View>
 
       <FlatList
@@ -112,17 +122,7 @@ const HomeScreen: React.FC = () => {
           </View>
         )}
       />
-      <AddTaskModal
-        visible={isModalVisible}
-        onClose={() => setIsModalVisible(false)}
-        onAdd={handleAddTask}
-      />
-      <FAB
-        style={styles.fab}
-        icon="plus"
-        color='white'
-        onPress={() => setIsModalVisible(true)}
-      />
+      
     </View>
   );
 };
@@ -140,13 +140,14 @@ const styles = StyleSheet.create({
   cardsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 16,
+    
   },
   card: {
     flex: 1,
-    marginHorizontal: 8,
+    marginHorizontal: 20,
     padding: 16,
     borderRadius: 8,
+    marginStart:10,
     backgroundColor: '#FFBCD9',
     alignItems: 'center',
   },
@@ -164,14 +165,13 @@ const styles = StyleSheet.create({
   remainingTasksContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 16,
-    left: 30
+    marginLeft: 10,
   },
   remainingTasksText: {
     fontSize: 20,
     fontWeight: 'bold',
     color: '#FF69B4',
-    marginLeft: 16,
+    marginLeft: 80,
   },
   categoryContainer: {
     marginBottom: 24,
@@ -184,9 +184,6 @@ const styles = StyleSheet.create({
   },
   fab: {
     position: 'absolute',
-    margin: 16,
-    right: '10%',
-    bottom: 50,
     backgroundColor: '#FFBCD9',
   },
 });
