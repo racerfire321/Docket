@@ -36,9 +36,6 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onPress, onEdit, onDelete }) 
   return (
     <>
       <View style={styles.container}>
-        <View style={styles.dateContainer}>
-          <Text style={styles.dateText}>{new Date(task.date).toDateString().toUpperCase()}</Text>
-        </View>
         <TouchableOpacity onPress={() => onPress(task.id)} style={styles.taskContainer}>
           <Text style={task.completed ? styles.completedTask : styles.task}>
             {task.title}

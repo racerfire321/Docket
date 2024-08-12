@@ -1,3 +1,4 @@
+
 import React, { useContext, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Calendar } from 'react-native-calendars';
@@ -21,7 +22,6 @@ const CalendarScreen: React.FC = () => {
         </View>
       ));
   };
-
   const markedDates = tasks.reduce((acc, task) => {
     acc[task.date] = { marked: true };
     return acc;

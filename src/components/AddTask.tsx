@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { View, Text, Modal, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { RadioButton } from 'react-native-paper';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import LinearGradient from 'react-native-linear-gradient';
 import { Task } from '../types';
 import { ThemeContext } from '../context/Theme/ThemContext';
@@ -18,10 +17,7 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({ visible, onClose, onAdd }) 
   const { theme } = useContext(ThemeContext);
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('Personal');
-  const [description, setDescription] = useState('');
-  const [date, setDate] = useState(new Date());
-  const [showDatePicker, setShowDatePicker] = useState(false);
-
+  
   const handleAddTask = () => {
     if (title.trim()) {
       const newTask: Task = {
@@ -29,22 +25,11 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({ visible, onClose, onAdd }) 
         title,
         category,
         completed: false,
-        description,
-        date: date.toISOString().split('T')[0],
       };
       onAdd(newTask);
       setTitle('');
       setCategory('Personal');
-      setDescription('');
-      setDate(new Date());
       onClose();
-    }
-  };
-
-  const handleDateChange = (event: any, selectedDate: Date | undefined) => {
-    setShowDatePicker(false);
-    if (selectedDate) {
-      setDate(selectedDate);
     }
   };
 
