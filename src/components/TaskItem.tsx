@@ -3,7 +3,13 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal, TextInput } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
-import { Task } from '../types';
+
+interface Task {
+  id: string;
+  category: string;
+  title: string;
+  completed: boolean;
+}
 
 interface TaskItemProps {
   task: Task;
@@ -24,9 +30,6 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onPress, onEdit, onDelete }) 
   return (
     <>
       <View style={styles.container}>
-        <View style={styles.dateContainer}>
-          <Text style={styles.dateText}>{new Date(task.date).toDateString().toUpperCase()}</Text>
-        </View>
         <TouchableOpacity onPress={() => onPress(task.id)} style={styles.taskContainer}>
           <Text style={task.completed ? styles.completedTask : styles.task}>
             {task.title}

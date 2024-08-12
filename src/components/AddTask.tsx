@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { View, Text, Modal, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { RadioButton } from 'react-native-paper';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import LinearGradient from 'react-native-linear-gradient';
 import { Task } from '../types';
 
@@ -17,10 +16,7 @@ const categories = ['Personal', 'Work', 'Home', 'Other'];
 const AddTaskModal: React.FC<AddTaskModalProps> = ({ visible, onClose, onAdd }) => {
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('Personal');
-  const [description, setDescription] = useState('');
-  const [date, setDate] = useState(new Date());
-  const [showDatePicker, setShowDatePicker] = useState(false);
-
+  
   const handleAddTask = () => {
     if (title.trim()) {
       const newTask: Task = {
@@ -28,22 +24,11 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({ visible, onClose, onAdd }) 
         title,
         category,
         completed: false,
-        description,
-        date: date.toISOString().split('T')[0],
       };
       onAdd(newTask);
       setTitle('');
       setCategory('Personal');
-      setDescription('');
-      setDate(new Date());
       onClose();
-    }
-  };
-
-  const handleDateChange = (event: any, selectedDate: Date | undefined) => {
-    setShowDatePicker(false);
-    if (selectedDate) {
-      setDate(selectedDate);
     }
   };
 
@@ -66,25 +51,6 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({ visible, onClose, onAdd }) 
             placeholder="Task title"
             placeholderTextColor="#aaa"
           />
-          <TextInput
-            style={[styles.input, styles.descriptionInput]}
-            value={description}
-            onChangeText={setDescription}
-            placeholder="Description"
-            placeholderTextColor="#aaa"
-            multiline
-          />
-          <TouchableOpacity onPress={() => setShowDatePicker(true)}>
-            <Text style={styles.datePickerText}>{date.toDateString()}</Text>
-          </TouchableOpacity>
-          {showDatePicker && (
-            <DateTimePicker
-              value={date}
-              mode="date"
-              display="default"
-              onChange={handleDateChange}
-            />
-          )}
           <Text style={styles.label}>Category:</Text>
           <View style={styles.radioGroup}>
             {categories.map(cat => (
@@ -134,15 +100,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 20,
     borderRadius: 5,
-  },
-  descriptionInput: {
-    height: 80,
-    textAlignVertical: 'top',
-  },
-  datePickerText: {
-    fontSize: 16,
-    color: '#333',
-    marginBottom: 20,
   },
   label: {
     fontSize: 16,

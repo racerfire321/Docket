@@ -1,6 +1,12 @@
 // TasksProvider.tsx
 import React, { createContext, useState, ReactNode, useContext } from 'react';
-import { Task } from '../types';
+
+interface Task {
+  id: string;
+  category: string;
+  title: string;
+  completed: boolean;
+}
 
 interface TasksContextProps {
   tasks: Task[];

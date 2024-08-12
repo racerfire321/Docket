@@ -96,7 +96,7 @@ const HomeScreen: React.FC = () => {
       />
         <Text style={styles.remainingTasksText}>Remaining Tasks: {remainingTasks}</Text>
         <LottieView
-          source={require('../assets/Animation - 1722825781033.json')}
+          source={require('../assets/Animation - 1722825781033.json')} // Path to your JSON animation file
           autoPlay
           loop
           style={styles.animation}
